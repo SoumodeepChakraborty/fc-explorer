@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚽ FC Explorer
+
+A player stats explorer for **EA FC 26** — built for PS5 sessions with friends. Browse 10,000+ players, compare stats side by side, learn controls, and test your player knowledge with a guessing game.
+
+---
+
+## Features
+
+### 🔍 Player Explorer
+
+- **10,654 players** loaded from the official EA FC 26 dataset
+- Filter by position, rating, league, nationality, preferred foot, skill moves, age range, and playstyles
+- Sort by any stat (OVR, PAC, SHO, PAS, DRI, DEF, PHY, AGE)
+- Real player face photos via sofifa CDN
+- Goalkeeper cards show GK-specific stats (DIV / HAN / KIC / REF / SPD / POS)
+
+### ⚖️ Side-by-Side Compare
+
+- Select any 2 players and compare them in a modal
+- Radar chart overlay (recharts) showing both stat profiles
+- Stat-by-stat table with win counts
+
+### 🎮 PS5 Controls Reference
+
+- 90+ controls across 9 categories: Shooting, Passing, Dribbling, Skill Moves, Defending, Set Pieces, Goalkeeper, Off Ball, General
+- PS5 button chips (○ ✕ □ △ L1/R1/L2/R2) color-coded by button type
+- Search across all controls, filter by category
+
+### 🎯 Guess the Player
+
+- Random player drawn from a configurable pool (difficulty: Easy / Medium / Hard / Elite)
+- Stats shown — no name, no photo
+- 6 guesses, each wrong guess reveals a new hint: Nationality → League → Age → Foot & Skills → Club
+- Autocomplete input from the full player database
+- Shake animation on wrong guess, win/loss celebration states, session score tracker
+
+---
+
+## Tech Stack
+
+- [Next.js 15](https://nextjs.org) (App Router)
+- [Tailwind CSS v4](https://tailwindcss.com)
+- [TypeScript](https://www.typescriptlang.org)
+- [Recharts](https://recharts.org) — radar chart in compare modal
+- Player data from [EA FC 26 dataset on Kaggle](https://www.kaggle.com/)
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone & install
+
+```bash
+git clone https://github.com/SoumodeepChakraborty/fc-explorer.git
+cd fc-explorer
+npm install
+```
+
+### 2. Add the player data
+
+The CSV is not committed (it's 10 MB). Download `FC26_20250921.csv` from Kaggle and place it in the project root, then run:
+
+```bash
+node scripts/import-players.js
+```
+
+This generates `public/players.json` (10,654 players, ~4 MB).
+
+### 3. Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```text
+fc-explorer/
+├── app/
+│   ├── page.tsx          # Main page — tab switcher + explorer logic
+│   └── globals.css       # Dark theme, scrollbars, game animations
+├── components/
+│   ├── PlayerCard.tsx    # Individual player card
+│   ├── FilterSidebar.tsx # All filter controls
+│   ├── CompareBar.tsx    # Fixed bottom compare bar
+│   ├── CompareModal.tsx  # Radar chart compare modal
+│   ├── ControlsPage.tsx  # PS5 controls reference
+│   └── GuessGame.tsx     # Guess the player game
+├── data/
+│   └── controls.ts       # PS5 controls dataset
+├── types/
+│   └── player.ts         # Player interface + stat helpers
+└── scripts/
+    └── import-players.js # CSV → public/players.json
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
