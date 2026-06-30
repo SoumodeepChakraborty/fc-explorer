@@ -6,6 +6,10 @@ import PlayerCard from '@/components/PlayerCard'
 import FilterSidebar, { Filters } from '@/components/FilterSidebar'
 import CompareBar from '@/components/CompareBar'
 import CompareModal from '@/components/CompareModal'
+import ControlsPage from '@/components/ControlsPage'
+import GuessGame from '@/components/GuessGame'
+
+type Tab = 'explorer' | 'controls' | 'guess'
 
 const DEFAULT_FILTERS: Filters = {
   search: '',
@@ -45,6 +49,7 @@ export default function Page() {
   const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [compareList, setCompareList] = useState<Player[]>([])
   const [modalOpen, setModalOpen] = useState(false)
+  const [tab, setTab] = useState<Tab>('explorer')
 
   useEffect(() => {
     fetch('/players.json')
@@ -104,34 +109,70 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Sort controls */}
-        <div className="flex items-center gap-1">
-          <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-white/25">Sort</span>
-          {SORT_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => toggleSort(opt.value)}
-              className={`flex items-center gap-0.5 rounded-lg px-2.5 py-1.5 text-[10px] font-semibold transition-colors ${
-                sortField === opt.value
-                  ? 'bg-violet-500/20 text-violet-300'
-                  : 'text-white/35 hover:text-white/70'
-              }`}
-            >
-              {opt.label}
-              {sortField === opt.value && (
-                <span className="text-[8px]">{sortDir === 'desc' ? '↓' : '↑'}</span>
-              )}
-            </button>
-          ))}
+        {/* Tab switcher */}
+        <div className="flex items-center gap-1 rounded-xl border border-white/8 bg-white/4 p-1">
+          <button
+            onClick={() => setTab('explorer')}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+              tab === 'explorer' ? 'bg-white/10 text-white' : 'text-white/35 hover:text-white/60'
+            }`}
+          >
+            🔍 Players
+          </button>
+          <button
+            onClick={() => setTab('controls')}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+              tab === 'controls' ? 'bg-white/10 text-white' : 'text-white/35 hover:text-white/60'
+            }`}
+          >
+            🎮 Controls
+          </button>
+          <button
+            onClick={() => setTab('guess')}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+              tab === 'guess' ? 'bg-white/10 text-white' : 'text-white/35 hover:text-white/60'
+            }`}
+          >
+            🎯 Guess
+          </button>
         </div>
 
+        {/* Sort controls — only on explorer tab */}
+        {tab === 'explorer' && (
+          <div className="flex items-center gap-1">
+            <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-white/25">Sort</span>
+            {SORT_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => toggleSort(opt.value)}
+                className={`flex items-center gap-0.5 rounded-lg px-2.5 py-1.5 text-[10px] font-semibold transition-colors ${
+                  sortField === opt.value
+                    ? 'bg-violet-500/20 text-violet-300'
+                    : 'text-white/35 hover:text-white/70'
+                }`}
+              >
+                {opt.label}
+                {sortField === opt.value && (
+                  <span className="text-[8px]">{sortDir === 'desc' ? '↓' : '↑'}</span>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+
         <span className="rounded-full border border-white/8 px-2.5 py-1 text-[10px] text-white/30">
-          {loading ? '…' : `${players.length.toLocaleString()} players`}
+          {tab === 'explorer' ? (loading ? '…' : `${players.length.toLocaleString()} players`) : tab === 'controls' ? 'PS5 Reference' : 'Guess the Player'}
         </span>
       </header>
 
-      {/* Main */}
-      <div className="flex flex-1 overflow-hidden">
+      {/* Controls tab */}
+      {tab === 'controls' && <ControlsPage />}
+
+      {/* Guess tab */}
+      {tab === 'guess' && <GuessGame players={players} />}
+
+      {/* Explorer tab */}
+      <div className={`flex flex-1 overflow-hidden ${tab !== 'explorer' ? 'hidden' : ''}`}>
         <FilterSidebar
           filters={filters}
           onChange={setFilters}

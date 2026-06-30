@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large data files (regenerate with: node scripts/import-players.js)
+FC26_20250921.csv
+public/players.json
+
+# playwright / verification artifacts
+pw-verify.js
+verify-*.png
