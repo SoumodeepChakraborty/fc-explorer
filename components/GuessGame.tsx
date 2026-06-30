@@ -44,10 +44,10 @@ const HINTS = [
 ]
 
 const DIFFICULTY = [
-  { label: 'Easy',   rating: 75, emoji: '😌', activeCls: 'bg-emerald-500/20 border-emerald-400/50 text-emerald-300' },
-  { label: 'Medium', rating: 80, emoji: '😤', activeCls: 'bg-sky-500/20 border-sky-400/50 text-sky-300' },
-  { label: 'Hard',   rating: 85, emoji: '😰', activeCls: 'bg-amber-500/20 border-amber-400/50 text-amber-300' },
-  { label: 'Elite',  rating: 90, emoji: '💀', activeCls: 'bg-red-500/20 border-red-400/50 text-red-300' },
+  { label: 'Easy',   rating: 90, emoji: '😌', activeCls: 'bg-emerald-500/20 border-emerald-400/50 text-emerald-300' },
+  { label: 'Medium', rating: 85, emoji: '😤', activeCls: 'bg-sky-500/20 border-sky-400/50 text-sky-300' },
+  { label: 'Hard',   rating: 80, emoji: '😰', activeCls: 'bg-amber-500/20 border-amber-400/50 text-amber-300' },
+  { label: 'Elite',  rating: 75, emoji: '💀', activeCls: 'bg-red-500/20 border-red-400/50 text-red-300' },
 ]
 
 const norm = (s: string) => s.normalize('NFD').replace(/\p{Mn}/gu, '').toLowerCase()
@@ -76,7 +76,7 @@ export default function GuessGame({ players }: Props) {
   const [guesses, setGuesses]     = useState<string[]>([])
   const [input, setInput]         = useState('')
   const [showDrop, setShowDrop]   = useState(false)
-  const [minRating, setMinRating] = useState(80)
+  const [minRating, setMinRating] = useState(90)
   const [league, setLeague]       = useState('')
   const [score, setScore]         = useState(0)
   const [shakeId, setShakeId]     = useState(0)
